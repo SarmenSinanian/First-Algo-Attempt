@@ -4,6 +4,9 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import plotly.express as px
+import pandas as pd
+import matplotlib.pyplot as plt
+from plotly.tools import mpl_to_plotly
 
 from app import app
 
@@ -27,31 +30,63 @@ the content.
 column1 = dbc.Col(
     [
         dcc.Markdown(
-            """
+            # """
         
-            ## Value Proposition
+            # ## Value Proposition
 
-            Emphasize how the app will benefit users. Don't emphasize the underlying technology.
+            # Emphasize how the app will benefit users. Don't emphasize the underlying technology.
 
-            ✅ RUN is a running app that adapts to your fitness levels and designs personalized workouts to help you improve your running.
+            # ✅ RUN is a running app that adapts to your fitness levels and designs personalized workouts to help you improve your running.
 
-            ❌ RUN is the only intelligent running app that uses sophisticated deep neural net machine learning to make your run smarter because we believe in ML driven workouts.
+            # ❌ RUN is the only intelligent running app that uses sophisticated deep neural net machine learning to make your run smarter because we believe in ML driven workouts.
 
+            # """
+            """
+            # SPY
+
+            Use this model to increase your probability of profitable trades.
+
+            Disclaimer: This is not investment advice. All predictions are for entertainment purposes only.
             """
         ),
-        dcc.Link(dbc.Button('Call To Action', color='primary'), href='/predictions')
+        dcc.Link(dbc.Button('Predict', color='primary'), href='/predictions')
     ],
     md=4,
 )
 
-gapminder = px.data.gapminder()
-fig = px.scatter(gapminder.query("year==2007"), x="gdpPercap", y="lifeExp", size="pop", color="continent",
-           hover_name="country", log_x=True, size_max=60)
+# gapminder = px.data.gapminder()
+# fig = px.scatter(gapminder.query("year==2007"), x="gdpPercap", y="lifeExp", size="pop", color="continent",
+#            hover_name="country", log_x=True, size_max=60)
+
+# column2 = dbc.Col(
+#     [
+#         dcc.Graph(figure=fig),
+#     ]
+# )
+
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+
+columns = ['Date','Close','Volume']
+
+spy = pd.read_csv('https://raw.githubusercontent.com/SarmenSinanian/DS-Unit-2-Applied-Modeling/master/SPY.csv', usecols = columns)
+spy['Date'] = pd.to_datetime(spy['Date'])
+matplotlib_figure = plt.figure()
 
 column2 = dbc.Col(
     [
-        dcc.Graph(figure=fig),
-    ]
-)
+    dcc.Graph(
+        id='example-graph',
+        figure={
+            'data': [
+                {'x': spy['Date'], 'y': spy['Close'], 'type': 'scatter'},
+            ],
+            'layout': {
+                'title': 'Dash Data Visualization'
+            }
+        }
+    )
+])
 
 layout = dbc.Row([column1, column2])
