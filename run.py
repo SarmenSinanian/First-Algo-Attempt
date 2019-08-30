@@ -4,10 +4,11 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
+from pages import index, predictions, insights, process, SPY_Chart
 
 # Imports from this application
 from app import app, server
-from pages import index, predictions, insights, process
+from pages import index, predictions, insights, process, SPY_Chart
 
 """
 https://dash-bootstrap-components.opensource.faculty.ai/l/components/navbar
@@ -25,18 +26,21 @@ light (boolean, optional): Applies the `navbar-light` class to the NavbarSimple,
 sticky (string, optional): Stick the navbar to the top or the bottom of the viewport, options: top, bottom. With `sticky`, the navbar remains in the viewport when you scroll. By contrast, with `fixed`, the navbar will remain at the top or bottom of the page.
 """
 
+
+
 navbar = dbc.NavbarSimple(
-    brand='YOUR APP NAME',
+    brand='Stock Price Direction Predictor',
     brand_href='/', 
     children=[
         dbc.NavItem(dcc.Link('Predictions', href='/predictions', className='nav-link')), 
         dbc.NavItem(dcc.Link('Insights', href='/insights', className='nav-link')), 
         dbc.NavItem(dcc.Link('Process', href='/process', className='nav-link')), 
+        dbc.NavItem(dcc.Link('SPY Chart', href='/SPY_Chart', className='nav-link'))
     ],
     sticky='top',
-    color='light', 
-    light=True, 
-    dark=False
+    color='#000000', 
+    light=False, 
+    dark=True
 )
 
 footer = dbc.Container(
@@ -44,11 +48,11 @@ footer = dbc.Container(
         dbc.Col(
             html.P(
                 [
-                    html.Span('Your Name', className='mr-2'), 
-                    html.A(html.I(className='fas fa-envelope-square mr-1'), href='mailto:<you>@<provider>.com'), 
-                    html.A(html.I(className='fab fa-github-square mr-1'), href='https://github.com/<you>/<repo>'), 
-                    html.A(html.I(className='fab fa-linkedin mr-1'), href='https://www.linkedin.com/in/<you>/'), 
-                    html.A(html.I(className='fab fa-twitter-square mr-1'), href='https://twitter.com/<you>'), 
+                    html.Span('Sarmen Sinanian', className='mr-2'), 
+                    html.A(html.I(className='fas fa-envelope-square mr-1'), href='mailto:sarmensin@gmail.com'), 
+                    html.A(html.I(className='fab fa-github-square mr-1'), href='https://github.com/SarmenSinanian/DS-Unit-2-Applied-Modeling'), 
+                    html.A(html.I(className='fab fa-linkedin mr-1'), href='https://www.linkedin.com/in/sarmensinanian/'), 
+                    # html.A(html.I(className='fab fa-twitter-square mr-1'), href='https://twitter.com/<you>'), 
                 ], 
                 className='lead'
             )
@@ -79,6 +83,8 @@ def display_page(pathname):
         return insights.layout
     elif pathname == '/process':
         return process.layout
+    elif pathname == '/SPY_Chart':
+        return SPY_Chart.layout
     else:
         return dcc.Markdown('## Page not found')
 
